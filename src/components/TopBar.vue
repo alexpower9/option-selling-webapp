@@ -4,11 +4,11 @@
       <img class="logo" src="../assets/FinanceLogo.svg" alt="logo">
       <nav>
         <ul class="nav-links">
-          <li><router-link to="/about">Holder Text</router-link></li>
+          <li><router-link to="/sign-up">Holder Text</router-link></li>
         </ul>
       </nav>
       <router-link to="/contact" class="contact-link">
-        <button>Contact</button>
+        <button>Sign Up</button>
       </router-link>
     </header>
   </body>
@@ -18,7 +18,7 @@
 export default {
   name: 'TopBar',
   created() {
-    console.log('TopBar created')
+    console.log('TopBar created') //delete this later
   }
 }
 </script>
