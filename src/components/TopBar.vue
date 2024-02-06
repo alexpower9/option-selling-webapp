@@ -2,21 +2,27 @@
   <body>
     <header class="nav-bar">
       <img class="logo" src="../assets/FinanceLogo.svg" alt="logo">
+      <div class="search-bar-container">
+        <SearchBar></SearchBar>
+      </div>
       <nav>
         <ul class="nav-links">
-          <li><router-link to="/sign-up">Holder Text</router-link></li>
+          <li><router-link to="/sign-up">Sign Up</router-link></li>
+          <li><router-link to="/contact">Contact</router-link></li>
         </ul>
       </nav>
-      <router-link to="/contact" class="contact-link">
-        <button>Sign Up</button>
-      </router-link>
     </header>
   </body>
 </template>
   
 <script>
+import SearchBar from '@/components/SearchBar.vue'
+
 export default {
   name: 'TopBar',
+  components: {
+    SearchBar
+  },
   created() {
     console.log('TopBar created') //delete this later
   }
@@ -33,53 +39,46 @@ export default {
   font-family: 'Montserrat', sans-serif; 
 }
 
-li, a, button {
+li, a{
   font-weight: 500;
   font-size: 16px;
   color:azure;
   text-decoration: none;
 }
 
+a:hover {
+  color: #4C2AFF;
+}
+
 header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 30px 10%;
 }
-
 .logo {
   width: 40px;
   height: 40px;
   cursor:pointer;
+  margin-right: auto;
 }
 
 .nav-links {
   list-style: none;
+  margin-left: 20px;
 }
 
 .nav-links li {
-  display: inline;
+  display: inline-block;
   padding: 0 20px;
   transition: all 0.3s ease 0s;
 }
 
-.nav-links li:hover {
-  color: #432cc5;
+.search-bar-container {
+  display: flex; 
+  justify-content: center;
 }
 
-button {
-  padding: 9px 25px;
-  background-image: linear-gradient(to right, #4C2AFF, #5c51b4), linear-gradient(to right, #6d5ce5, #4C2AFF);
-  background-size: 100% 200%;
-  background-position: 100% 0;
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease 0s;
-}
 
-button:hover {
-  background-position: 0 100%;
-}
+
 </style>

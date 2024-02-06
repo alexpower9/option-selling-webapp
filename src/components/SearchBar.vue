@@ -1,9 +1,17 @@
 <template>
-    <div>
-        <input type="text" v-model="search" placeholder="Search stocks...">
-        <div v-for="stock in filteredStocks" :key="stock.ticker" @click="goToPage(stock.ticker)">
-            {{ stock.name }} ({{ stock.ticker }})
-        </div>
+    <div class="container">
+      <div class="search-bar">
+        <i class="material-icons-outlined">search</i>
+        <input class="search-input" type="text" v-model="search" placeholder="Search">
+      </div>
+      <div class="results">
+        <div v-for="(stock, index) in filteredStocks" 
+        :key="stock.ticker"
+        :class="{ 'highlighted': index === 0, 'stock-name': true }" 
+        @click="goToPage(stock.ticker)">
+        {{ stock.name }} ({{ stock.ticker }})
+      </div>
+      </div>
     </div>
 </template>
 
@@ -52,6 +60,7 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 
 * {
   margin: 0;
@@ -59,12 +68,69 @@ export default {
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif; 
 }
-
-input {
-  width: 200px;
-  height: 30px;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+.material-icons-outlined {
+  font-family: 'Material Icons Outlined';
+  color: #4C2AFF;
+}
+.stock-name {
+  box-shadow: 0 0 0 3px #4C2AFF;
+  color: white;
+  width: 90%;
+  border-radius: 10px;
+  padding: 3px;
+  display: inline-block; /* To apply padding and border to inline elements */
+  margin-bottom: 20px; /* Space between items, adjust as needed */
+}
+
+.stock-name:hover {
+  color: #4C2AFF;
+  cursor: pointer;
+}
+
+.highlighted {
+  color: #4C2AFF;
+}
+ 
+.results {
+  width: 258px;
+  position: absolute;
+  top: 100px;
+}
+.search-bar 
+{
+  display: flex;
+  align-items: center;
+  max-width: 260px;
+  border-radius: 28px;
+  background: #24252A;
+  padding: 14px;
+  box-shadow: 0 0 0 3px #4C2AFF;
+  transition: box-shadow 0.25s ease 0s;
+  /* margin-bottom: 20px; */
+  position: relative;
+}
+.search-bar:focus-within{
+  box-shadow: 0 0 0 3px #4425dd;
+}
+.search-input{
+  font-size:16px;
+  color: whitesmoke;
+  margin-left: 14px;
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: whitesmoke;
+  opacity: 0.7;
+}
+
 </style>
