@@ -1,24 +1,22 @@
 <template>
-<div class="top-bar">
-    <TopBar></TopBar>
-    <SearchBar></SearchBar>
-</div>
+  <div class="top-bar">
+      <TopBar></TopBar>
+  </div>
 </template>
 
 <script>
 import TopBar from '@/components/TopBar.vue'
-import SearchBar from '@/components/SearchBar.vue'
+
 
 export default {
   name: 'HomeView',
   components: {
-    TopBar, SearchBar
+    TopBar
   }
 }
 
 </script>
 
-<style>
-
+<style scoped>
 
 </style>
