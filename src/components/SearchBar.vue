@@ -37,8 +37,8 @@ export default {
   },
   methods: {
     //we will use this method to navigate to the stock page eventually
-    goToPage() {
-      //this.$router.push({name: 'Stock', params: {ticker: ticker}})
+    goToPage(ticker) {
+      this.$router.push({name: 'stock', params: {ticker: ticker}});
     }
   },
   computed: {
