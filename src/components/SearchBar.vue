@@ -2,7 +2,7 @@
     <div class="container">
       <div class="search-bar">
         <i class="material-icons-outlined">search</i>
-        <input class="search-input" type="text" v-model="search" placeholder="Search">
+        <input class="search-input" type="text" v-model="search" placeholder="Search" @keyup.enter="goToFirstResult">
       </div>
       <div class="results">
         <div v-for="(stock, index) in filteredStocks" 
@@ -39,6 +39,11 @@ export default {
     //we will use this method to navigate to the stock page eventually
     goToPage(ticker) {
       this.$router.push({name: 'stock', params: {ticker: ticker}});
+    },
+    goToFirstResult() {
+      if(this.filteredStocks.length > 0) {
+        this.goToPage(this.filteredStocks[0].ticker);
+      }
     }
   },
   computed: {
@@ -85,8 +90,8 @@ export default {
   width: 90%;
   border-radius: 10px;
   padding: 3px;
-  display: inline-block; /* To apply padding and border to inline elements */
-  margin-bottom: 20px; /* Space between items, adjust as needed */
+  display: inline-block; 
+  margin-bottom: 20px; 
 }
 
 .stock-name:hover {
