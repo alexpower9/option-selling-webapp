@@ -2,12 +2,14 @@
     <div class="container">
       <div class="search-bar">
         <i class="material-icons-outlined">search</i>
-        <input class="search-input" type="text" v-model="search" placeholder="Search" @keyup.enter="goToFirstResult">
+        <input ref="searchInput" class="search-input" type="text" v-model="search" placeholder="Search" @keyup.enter="goToPage(filteredStocks[highlightedIndex].ticker)"
+        @keydown.up.prevent="highlightedIndex = (highlightedIndex + filteredStocks.length - 1) % filteredStocks.length"
+        @keydown.down.prevent="highlightedIndex = (highlightedIndex + 1) % filteredStocks.length">
       </div>
-      <div class="results">
+      <div class="results results-background" v-show="filteredStocks.length > 0"> <!--This should only appear if we are actually searching-->
         <div v-for="(stock, index) in filteredStocks" 
         :key="stock.ticker"
-        :class="{ 'highlighted': index === 0, 'stock-name': true }" 
+        :class="{ 'highlighted': index === highlightedIndex, 'stock-name': true }" 
         @click="goToPage(stock.ticker)">
         {{ stock.name }} ({{ stock.ticker }})
       </div>
@@ -24,12 +26,13 @@ export default {
   data() {
     return {
         search: '',
+        highlightedIndex: 0,
         stocks: [
         {name: "Apple", ticker: "AAPL"},
         {name: "Microsoft", ticker: "MSFT"},
         {name: "Google", ticker: "GOOGL"},
         {name: "Amazon", ticker: "AMZN"},
-        {name: "Facebook", ticker: "FB"},
+        {name: "Meta", ticker: "META"},
         {name: "Tesla", ticker: "TSLA"},
         {name: "Netflix", ticker: "NFLX"}
       ]
@@ -38,7 +41,10 @@ export default {
   methods: {
     //we will use this method to navigate to the stock page eventually
     goToPage(ticker) {
+      this.$refs.searchInput.blur(); //unfocus the search bar apparently after we use it
       this.$router.push({name: 'stock', params: {ticker: ticker}});
+      this.highlightedIndex = 0; //reset to the first element when we go back to the search bar
+      this.search = ''; //clear the search bar
     },
     goToFirstResult() {
       if(this.filteredStocks.length > 0) {
@@ -107,6 +113,14 @@ export default {
   width: 258px;
   position: absolute;
   top: 100px;
+}
+
+.results-background {
+  background-color: #24252A; /* gray */
+  padding: 15px 10px 0px 10px;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 .search-bar 
 {
