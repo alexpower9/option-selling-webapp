@@ -1,20 +1,66 @@
 <template>
-    <h1>This is the page for {{ ticker }}</h1>
+  <TopBar></TopBar>
+  <h1>This is the page for {{ ticker }}</h1>
+  <h1>This is the current price {{ price }}</h1>
+  <div v-for="(price, index) in strikes" :key="index">
+    <h1>{{ price }}</h1>
+  </div>
 </template>
 
 <script>
+import TopBar from '@/components/TopBar.vue'
+import axios from 'axios';
+
 export default {
   name: 'StockPage',
+  components: {TopBar},
+  props:['ticker'],
+  data() {
+    return {
+      price: null,
+      strikes: [],
+    };
+  },
+  methods: {
+    fetchData() {
+      this.strikes = [];
+      let API_KEY = process.env.VUE_APP_API_KEY; 
+
+      axios.get('https://api.marketdata.app/v1/options/chain/' + this.ticker +'/', {
+        headers: {
+          'Authorization': 'Bearer ' + API_KEY
+        }
+      })
+      .then(response => {
+        
+        for(let i = 0; i < 10; i++) {
+          this.strikes.push(response.data.strike[i]);
+        }
+  
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
+  },
   created() {
     console.log('StockPage created') //delete this later
+    this.fetchData();
   },
-  props:['ticker']
+  watch: {
+    ticker: {
+    immediate: true,
+    handler() {
+      this.fetchData();
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
 h1 {
-    color: #000;
+    color: #ffffff;
     font-size: 2em;
     text-align: center;
     margin-top: 20px;
