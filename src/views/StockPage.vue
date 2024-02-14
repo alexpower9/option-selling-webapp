@@ -2,9 +2,6 @@
   <TopBar></TopBar>
   <h1>This is the page for {{ ticker }}</h1>
   <h1>This is the current price {{ price }}</h1>
-  <div v-for="(price, index) in strikes" :key="index">
-    <h1>{{ price }}</h1>
-  </div>
 </template>
 
 <script>
@@ -29,13 +26,18 @@ export default {
       axios.get('https://api.marketdata.app/v1/options/chain/' + this.ticker +'/', {
         headers: {
           'Authorization': 'Bearer ' + API_KEY
+        },
+        params: {
+          //dont actually need the date if I omit it all together
+          dte : 365
         }
       })
       .then(response => {
-        
         for(let i = 0; i < 10; i++) {
           this.strikes.push(response.data.strike[i]);
         }
+        console.log(response.data)
+        
   
       })
       .catch(error => {
