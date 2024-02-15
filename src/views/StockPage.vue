@@ -29,16 +29,12 @@ export default {
         },
         params: {
           //dont actually need the date if I omit it all together
-          dte : 365
+          //dte : 365
+          strikeLimit: 20, //only 10 strikes for now
         }
       })
       .then(response => {
-        for(let i = 0; i < 10; i++) {
-          this.strikes.push(response.data.strike[i]);
-        }
-        console.log(response.data)
-        
-  
+        console.log("This is our response data",response.data);
       })
       .catch(error => {
         console.log(error);
