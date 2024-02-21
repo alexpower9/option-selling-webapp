@@ -1,7 +1,7 @@
 <template>
   <body>
     <header class="nav-bar">
-      <img class="logo" src="../assets/FinanceLogo.svg" alt="logo">
+      <img class="logo" src="../assets/FinanceLogo.svg" alt="logo" @click="returnHome">
       <div class="search-bar-container">
         <SearchBar></SearchBar>
       </div>
@@ -25,6 +25,11 @@ export default {
   },
   created() {
     console.log('TopBar created') //delete this later
+  },
+  methods: {
+    returnHome() {
+      this.$router.push('/');
+    }
   }
 }
 </script>
@@ -37,6 +42,10 @@ export default {
   box-sizing: border-box;
   background-color: #24252A;
   font-family: 'Montserrat', sans-serif; 
+}
+
+.logo-link {
+  text-decoration: none;
 }
 
 li, a{
@@ -78,7 +87,4 @@ header {
   display: flex; 
   justify-content: center;
 }
-
-
-
 </style>

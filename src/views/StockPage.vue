@@ -1,21 +1,29 @@
 <template>
   <TopBar></TopBar>
+  <IndexDisplay></IndexDisplay>
   <h1>This is the page for {{ ticker }}</h1>
-  <h1>This is the current price {{ price }}</h1>
+  <div class="chain-container">
+    <CallChain v-if="optionData" :optionsData="optionData"></CallChain>
+    <PutChain v-if="optionData" :optionsData="optionData"></PutChain>
+  </div>
 </template>
 
 <script>
 import TopBar from '@/components/TopBar.vue'
 import axios from 'axios';
+import CallChain from '@/components/CallChain.vue';
+import PutChain from '@/components/PutChain.vue';
+import IndexDisplay from '@/components/IndexDisplay.vue';
 
 export default {
   name: 'StockPage',
-  components: {TopBar},
+  components: {TopBar, CallChain, PutChain, IndexDisplay},
   props:['ticker'],
   data() {
     return {
       price: null,
       strikes: [],
+      optionData: null
     };
   },
   methods: {
@@ -29,16 +37,13 @@ export default {
         },
         params: {
           //dont actually need the date if I omit it all together
-          dte : 365
+          //dte : 365
+          strikeLimit: 20, //only 10 strikes for now
         }
       })
       .then(response => {
-        for(let i = 0; i < 10; i++) {
-          this.strikes.push(response.data.strike[i]);
-        }
-        console.log(response.data)
-        
-  
+        this.optionData = response.data;
+        //console.log(this.optionsData);
       })
       .catch(error => {
         console.log(error);
@@ -66,5 +71,11 @@ h1 {
     font-size: 2em;
     text-align: center;
     margin-top: 20px;
+}
+
+.chain-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 60px;
 }
 </style>
