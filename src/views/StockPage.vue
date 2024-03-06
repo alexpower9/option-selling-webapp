@@ -14,6 +14,8 @@ import axios from 'axios';
 import CallChain from '@/components/CallChain.vue';
 import PutChain from '@/components/PutChain.vue';
 import IndexDisplay from '@/components/IndexDisplay.vue';
+import * as MarketDataAPI from '@/api/market-data-api.js'
+import * as TwelveDataAPI from '@/api/twelve-data-api.js'
 
 export default {
   name: 'StockPage',
@@ -43,22 +45,40 @@ export default {
       })
       .then(response => {
         this.optionData = response.data;
-        //console.log(this.optionsData);
+        console.log(response.data);
       })
       .catch(error => {
         console.log(error);
       });
+    },
+    fetchDataWithAPI() {
+      MarketDataAPI.getOptionData(this.ticker, 20)
+      .then(data => {
+        this.optionData = data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      //test twelve data
+      TwelveDataAPI.getNSDQData()
+      .then(data => {
+        console.log(data)
+      })
+      .catch(data => {
+        console.log(data)
+      })
     }
   },
-  created() {
+  mounted() {
     console.log('StockPage created') //delete this later
-    this.fetchData();
+    this.fetchDataWithAPI();
   },
   watch: {
     ticker: {
     immediate: true,
     handler() {
-      this.fetchData();
+      this.fetchDataWithAPI();
       }
     }
   }
