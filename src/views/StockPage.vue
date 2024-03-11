@@ -1,7 +1,6 @@
 <template>
   <TopBar></TopBar>
   <IndexDisplay></IndexDisplay>
-  <h1>This is the page for {{ ticker }}</h1>
   <div class="chain-container">
     <CallChain v-if="optionData" :optionsData="optionData"></CallChain>
     <PutChain v-if="optionData" :optionsData="optionData"></PutChain>

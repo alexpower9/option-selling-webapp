@@ -38,3 +38,13 @@ export const getVIXData = () => {
 }
 
 
+export const getSPYData = () => {
+    return axiosInstance().get(`https://api.marketdata.app/v1/indices/quotes/SPX`)
+    .then(response => response.data)
+}
+
+export const getNasdaqData = () => {
+    return axiosInstance().get(`https://api.marketdata.app/v1/indices/quotes/NDX`)
+    .then(response => response.data)
+}
+

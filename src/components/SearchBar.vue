@@ -121,6 +121,7 @@ export default {
   border-radius: 5px;
   max-height: 200px;
   overflow-y: auto;
+  z-index: 1000;
 }
 .search-bar 
 {
