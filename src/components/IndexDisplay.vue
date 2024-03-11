@@ -1,9 +1,13 @@
 <template>
-<!--This component will have the following 4 indices: S&P 500, NASDAQ, DOW30 and RUSSELL2000-->
-<!--Not sure if the api calls should be done from here or the stock page component tbh-->
-<h1>The current price of the DJI is {{ this.currentPrice.dow30 }}</h1>
-<h1>The current price of the vix is  {{ this.currentPrice.vix }}</h1>
+  <div class="container">
+    <div class="card" v-for="(value, index) in currentPrice" :key="index">
+      <h5 class="card-title">{{ index.toUpperCase() }}</h5>
+      <p class="card-text">{{ value }}</p>
+      <p class="card-change"> {{ previousCloseValueChange[index] }} ({{ percentChange[index] }}%)</p>
+    </div>
+  </div>
 </template>
+
 
 <script>
 
@@ -19,7 +23,13 @@ export default {
                 dow30: null,
                 vix: null
             },
-            previousClosePercentage : {
+            previousCloseValueChange : {
+                sp500: null,
+                nasdaq: null,
+                dow30: null,
+                vix: null
+            },
+            percentChange: {
                 sp500: null,
                 nasdaq: null,
                 dow30: null,
@@ -33,8 +43,17 @@ export default {
             //just dow for now and vix
             MarketDataAPI.getDJIData()
             .then(data => {
-                console.log(data)
                 this.currentPrice.dow30 = data.last[0]
+
+                //change gives us the difference between the previous close trading price
+                //and the current trading price. we can calculate percent change on our own
+                if(data.change[0] === null) {
+                    //make call to backend to get the previous close, calculate change from that
+                    //blah blah blah 
+                } else {
+                    this.previousCloseValueChange.dow30 = data.change[0]
+                    console.log("The change from the price of yesterday is " + this.previousCloseValueChange.dow30)
+                }
             })
             .catch(error => {
                 console.log(error)
@@ -44,7 +63,45 @@ export default {
             MarketDataAPI.getVIXData()
             .then(data => {
                 this.currentPrice.vix = data.last[0]
-                console.log(data)
+
+                if(data.change[0] === null) {
+                    //make call to backend to get the previous close, calculate change from that
+                    //blah blah blah 
+                } else {
+                    this.previousCloseValueChange.vix = data.change[0]
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+
+            //spy
+            MarketDataAPI.getSPYData()
+            .then(data => {
+                this.currentPrice.sp500 = data.last[0]
+                if(data.change[0] === null) {
+                    let last = 5000; //just a place holder
+                    this.previousCloseValueChange.sp500 = this.currentPrice.sp500 - last;
+                    this.percentChange.sp500 = ((this.currentPrice.sp500 - last) / last)*100;
+                    console.log(this.percentChange.sp500);
+                } else {
+                    this.previousCloseValueChange.sp500 = data.change[0]
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+
+            //nasdaq            
+            MarketDataAPI.getNasdaqData()
+            .then(data => {
+                this.currentPrice.nasdaq = data.last[0]
+                if(data.change[0] === null) {
+                    //make call to backend to get the previous close, calculate change from that
+                    //blah blah blah 
+                } else {
+                    this.previousCloseValueChange.nasdaq = data.change[0]
+                }
             })
             .catch(error => {
                 console.log(error)
@@ -56,3 +113,53 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 70vw;
+  margin:auto;
+}
+
+.card {
+    position:relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    height: 48px;
+    border: 1px solid rgba(241, 241, 241, 0.2); 
+    border-radius: 10px;
+}
+
+
+.card-title {
+  font-size: 0.8em;
+  margin-bottom: 10px;
+  color: #ffffff;
+  position:absolute;
+  top:-15px;
+  left:10px;
+}
+
+.card-text {
+  font-size: 1em;
+  color:#4C2AFF;
+  position: absolute;
+  left:10px;
+  top:25px;
+  font-weight: bold;
+}
+
+.card-change {
+    font-size: 0.7em;
+    color:#20ec38;
+    position: absolute;
+    left: 10px;
+    top: 55px;
+}
+</style>
