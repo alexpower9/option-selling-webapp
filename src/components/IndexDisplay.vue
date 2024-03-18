@@ -12,6 +12,7 @@
 <script>
 
 import * as MarketDataAPI from '@/api/market-data-api.js'
+//import { getLocalData } from '@/api/local-api'
 
 export default {
     name: 'IndexDisplay',
@@ -45,11 +46,14 @@ export default {
             .then(data => {
                 this.currentPrice.dow30 = data.last[0]
 
-                //change gives us the difference between the previous close trading price
-                //and the current trading price. we can calculate percent change on our own
                 if(data.change[0] === null) {
-                    //make call to backend to get the previous close, calculate change from that
-                    //blah blah blah 
+                    // getLocalData('dow30')
+                    // .then(data => {
+                    //     getLocalData('dow30')
+                    // })
+                    // .catch(error => {
+                    //     console.log(error)
+                    // })
                 } else {
                     this.previousCloseValueChange.dow30 = data.change[0]
                     console.log("The change from the price of yesterday is " + this.previousCloseValueChange.dow30)
