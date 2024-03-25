@@ -1,6 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
 
-// Create a new database
 let db = new sqlite3.Database('index-price.db', (err) => {
   if (err) {
     console.error(err.message);
@@ -22,7 +21,6 @@ db.run(`CREATE TABLE previousClosePercentage (
   console.log('Table created.');
 });
 
-// Close the database connection
 db.close((err) => {
   if (err) {
     console.error(err.message);
