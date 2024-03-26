@@ -12,7 +12,7 @@
 <script>
 
 import * as MarketDataAPI from '@/api/market-data-api.js'
-//import { getLocalData } from '@/api/local-api'
+import * as LocalAPI from '@/api/local-api.js'
 
 export default {
     name: 'IndexDisplay',
@@ -41,22 +41,24 @@ export default {
     //make seperate calls for each index we are going to be using
     methods : {
         fetchCurrentPrices() {
-            //just dow for now and vix
+            //Here is how the db numbers are
+            this.localAPICall("sp500").then(result => {
+            console.log("DB numbers as proof\nSP500:" + result);
+            }).catch(error => {
+            console.log(error);
+            });
+
+
             MarketDataAPI.getDJIData()
             .then(data => {
                 this.currentPrice.dow30 = data.last[0]
 
                 if(data.change[0] === null) {
-                    // getLocalData('dow30')
-                    // .then(data => {
-                    //     getLocalData('dow30')
-                    // })
-                    // .catch(error => {
-                    //     console.log(error)
-                    // })
+                    this.previousCloseValueChange.dow30 = this.currentPrice.dow30 - this.localAPICall("dow30");
+                    this.percentChange.dow30 = ((this.currentPrice.dow30 - this.localAPICall("dow30")) / this.localAPICall("dow30"))*100;
                 } else {
                     this.previousCloseValueChange.dow30 = data.change[0]
-                    console.log("The change from the price of yesterday is " + this.previousCloseValueChange.dow30)
+                    //add value 
                 }
             })
             .catch(error => {
@@ -67,10 +69,9 @@ export default {
             MarketDataAPI.getVIXData()
             .then(data => {
                 this.currentPrice.vix = data.last[0]
-
                 if(data.change[0] === null) {
-                    //make call to backend to get the previous close, calculate change from that
-                    //blah blah blah 
+                    this.previousCloseValueChange.vix = this.currentPrice.vix - this.localAPICall("vix");
+                    this.percentChange.vix = ((this.currentPrice.vix - this.localAPICall("vix")) / this.localAPICall("vix"))*100;
                 } else {
                     this.previousCloseValueChange.vix = data.change[0]
                 }
@@ -84,10 +85,8 @@ export default {
             .then(data => {
                 this.currentPrice.sp500 = data.last[0]
                 if(data.change[0] === null) {
-                    let last = 5000; //just a place holder
-                    this.previousCloseValueChange.sp500 = this.currentPrice.sp500 - last;
-                    this.percentChange.sp500 = ((this.currentPrice.sp500 - last) / last)*100;
-                    console.log(this.percentChange.sp500);
+                    this.previousCloseValueChange.sp500 = this.currentPrice.sp500 - this.localAPICall("sp500");
+                    this.percentChange.sp500 = ((this.currentPrice.sp500 - this.localAPICall("sp500")) / this.localAPICall("sp500"))*100;
                 } else {
                     this.previousCloseValueChange.sp500 = data.change[0]
                 }
@@ -101,11 +100,21 @@ export default {
             .then(data => {
                 this.currentPrice.nasdaq = data.last[0]
                 if(data.change[0] === null) {
-                    //make call to backend to get the previous close, calculate change from that
-                    //blah blah blah 
+                    this.previousCloseValueChange.nasdaq = this.currentPrice.nasdaq - this.localAPICall("nasdaq");
+                    this.percentChange.nasdaq = ((this.currentPrice.nasdaq - this.localAPICall("nasdaq")) / this.localAPICall("nasdaq"))*100;
                 } else {
                     this.previousCloseValueChange.nasdaq = data.change[0]
                 }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+        localAPICall(index) {
+            return LocalAPI.getLocalData(index)
+            .then(data => {
+                //console.log(data[index])
+                return data[index]
             })
             .catch(error => {
                 console.log(error)

@@ -14,5 +14,3 @@ One of my favourite strategies is selling vertical spreads on blue chip stocks, 
 ## How can I operate this to try it for myself?
 
 First, ensure node is installed on your machine. Then, create a .env file, and write "VUE_APP_API_KEY=". Go to marketdata.app and obtain your api key, and set this env variable equal to it as a string. Then, run npm install to ensure all dependencies are installed on your machine. When this is completed, run "npm run dev", which will start the local server (for now atleast) and display your link to the web app being hosted locally. Here, you should be able to do things such as create an account, create sub accounts, and begin trading. 
-
-

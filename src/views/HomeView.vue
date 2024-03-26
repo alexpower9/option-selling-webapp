@@ -17,7 +17,7 @@
 
 <script>
 import TopBar from '@/components/TopBar.vue'
-import axios from 'axios'
+import * as LocalAPI from '@/api/local-api.js'
 
 export default {
   name: 'HomeView',
@@ -26,14 +26,12 @@ export default {
   },
   methods: {
     //just test local api with this
-    async testLocalAPI() {
+    testLocalAPI() {
       console.log('testing local api')
-      try {
-        const response = await axios.get('http://localhost:3000/api/dow30')
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
+      LocalAPI.getLocalData("dow30")
+      .then(data => {
+        console.log(data["dow30"])
+      })
     }
   },
   mounted: function() {
