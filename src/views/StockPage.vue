@@ -1,9 +1,15 @@
 <template>
   <TopBar></TopBar>
   <IndexDisplay></IndexDisplay>
-  <div class="chain-container">
+  <!-- <div class="chain-container">
     <CallChain v-if="optionData" :optionsData="optionData"></CallChain>
     <PutChain v-if="optionData" :optionsData="optionData"></PutChain>
+  </div> -->
+  <div class="flex-container">
+    <div class="flex-button">
+      <button @click="showOverview()">Overview</button>
+      <button @click="showCallChain()">Options Chain</button>
+    </div>
   </div>
 </template>
 
@@ -14,7 +20,6 @@ import CallChain from '@/components/CallChain.vue';
 import PutChain from '@/components/PutChain.vue';
 import IndexDisplay from '@/components/IndexDisplay.vue';
 import * as MarketDataAPI from '@/api/market-data-api.js'
-import * as TwelveDataAPI from '@/api/twelve-data-api.js'
 
 export default {
   name: 'StockPage',
@@ -24,7 +29,8 @@ export default {
     return {
       price: null,
       strikes: [],
-      optionData: null
+      optionData: null,
+      summaryDisplay: true
     };
   },
   methods: {
@@ -58,15 +64,12 @@ export default {
       .catch(error => {
         console.log(error);
       });
-
-      //test twelve data
-      TwelveDataAPI.getNSDQData()
-      .then(data => {
-        console.log(data)
-      })
-      .catch(data => {
-        console.log(data)
-      })
+    },
+    showOverview() {
+      this.summaryDisplay = true;
+    },
+    showCallChain() {
+      this.summaryDisplay = false;
     }
   },
   mounted() {
@@ -85,6 +88,8 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700&display=swap'); 
+
 h1 {
     color: #ffffff;
     font-size: 2em;
@@ -96,5 +101,37 @@ h1 {
     display: flex;
     justify-content: space-around;
     margin-top: 60px;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-button {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+  width: 33%;
+  gap: 4em;
+  margin-left: 6%;
+}
+
+.flex-button button {
+  border-radius: 28px;
+  background: #24252A;
+  padding: 15px 60px; 
+  border: none; 
+  outline: 0;
+  box-shadow: 0 0 0 3px #4C2AFF; 
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  color: rgba(245, 245, 245, 0.7);
+  transition: color 0.3s ease;
+}
+
+.flex-button button:hover {
+  color: rgb(255, 255, 255);
+  cursor: pointer;
 }
 </style>
