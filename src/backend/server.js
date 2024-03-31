@@ -1,9 +1,11 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
+const cors = require('cors');
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 app.get('/api/:column', (req, res) => {
     let db = new sqlite3.Database('./src/backend/index-price.db', sqlite3.OPEN_READONLY, (err) => {
       if (err) {
