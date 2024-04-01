@@ -48,3 +48,12 @@ export const getNasdaqData = () => {
     .then(response => response.data)
 }
 
+export const stockData = (ticker) => {
+    return axiosInstance().get(`https://api.marketdata.app/v1/stocks/quotes/${ticker}`, {
+        params: {
+            ['52week'] : true
+        }
+    })
+    .then(response => response.data)
+}
+
