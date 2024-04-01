@@ -1,17 +1,17 @@
 <template>
   <TopBar></TopBar>
   <IndexDisplay></IndexDisplay>
-  <!-- <div class="chain-container">
-    <CallChain v-if="optionData" :optionsData="optionData"></CallChain>
-    <PutChain v-if="optionData" :optionsData="optionData"></PutChain>
-  </div> -->
   <div class="flex-container">
     <div class="flex-button">
       <button @click="showOverview()">Overview</button>
       <button @click="showCallChain()">Options Chain</button>
     </div>
   </div>
-  <StockInfo :ticker="ticker"></StockInfo>
+  <div class="chain-container" v-if="!summaryDisplay">
+    <CallChain v-if="optionData" :optionsData="optionData"></CallChain>
+    <PutChain v-if="optionData" :optionsData="optionData"></PutChain>
+  </div> 
+  <StockInfo :ticker="ticker" v-if="summaryDisplay"></StockInfo>
 </template>
 
 <script>
