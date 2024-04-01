@@ -11,6 +11,7 @@
       <button @click="showCallChain()">Options Chain</button>
     </div>
   </div>
+  <StockInfo :ticker="ticker"></StockInfo>
 </template>
 
 <script>
@@ -20,10 +21,11 @@ import CallChain from '@/components/CallChain.vue';
 import PutChain from '@/components/PutChain.vue';
 import IndexDisplay from '@/components/IndexDisplay.vue';
 import * as MarketDataAPI from '@/api/market-data-api.js'
+import StockInfo from '@/components/StockInfo.vue';
 
 export default {
   name: 'StockPage',
-  components: {TopBar, CallChain, PutChain, IndexDisplay},
+  components: {TopBar, CallChain, PutChain, IndexDisplay, StockInfo},
   props:['ticker'],
   data() {
     return {
@@ -67,9 +69,11 @@ export default {
     },
     showOverview() {
       this.summaryDisplay = true;
+      console.log("Showing overview")
     },
     showCallChain() {
       this.summaryDisplay = false;
+      console.log("Showing overview")
     }
   },
   mounted() {
