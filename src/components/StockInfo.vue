@@ -1,25 +1,25 @@
 <template>
-    <div class="container">
-        <div class="stock-info">
-            <h2 class="stock-name">{{ stockName }}</h2>
-            <h1 class="stock-ticker">{{ ticker }}</h1>
+   <div class="stock-info-container">
+        <div class="name-and-ticker" style="grid-area: name-and-ticker"> 
+            <div class="img-name-ticker">
+                <img :src="imgPath" class="stock-logo"/>
+                <h1 class="stock-name">{{stockName}}</h1>
+                <h1 class="ticker">{{ticker}}</h1>
+            </div>
+            <div class="icons">
+                <button @click="isClicked = !isClicked">
+                    <i class="material-icons-outlined" :style="{color : isClicked ? '#4C2AFF' : 'white'}">favorite_border</i>
+                </button>
+                <button @click="notificationsIsClicked = !notificationsIsClicked">
+                    <i class="material-icons-outlined" :style="{color : notificationsIsClicked ? '#4C2AFF' : 'white'}">notifications_none</i>
+                </button>
+            </div>
         </div>
-        <div class="pricing">
-            <h3 class="current-price">{{ last }}</h3>
-            <h3 :class="{'positive-change': change > 0, 'negative-change': change <= 0}"> {{ change }} ({{ changepct }}%) </h3>
-        </div>
-        <div class="ask-and-bid">
-            <h3 class="ask">Ask: <span class="dynamic-content">{{ ask }}</span></h3>
-            <h3 class="bid">Bid: <span class="dynamic-content">{{ bid }}</span></h3>
-        </div>
-        <div class="volume">
-            <h3 class="current-volume">Volume: <span class="dynamic-content">{{ volume }}</span></h3>
-        </div>
-        <div class="week-high-low">
-            <h3 class="week-high">52 Week High: <span class="dynamic-content">{{ weekHigh }}</span></h3>
-            <h3 class="week-low">52 Week Low: <span class="dynamic-content">{{ weekLow }}</span></h3>
-        </div>
-    </div>
+        <div class="pricing"  style="grid-area: pricing"></div>
+        <div class="ask-and-bid" style="grid-area: ask-and-bid"></div>
+        <div class="week-high-low"  style="grid-area: week-high-low"></div>
+        <div class="volume"  style="grid-area: volume"></div>
+   </div>
 </template>
 
 <script>
@@ -42,15 +42,18 @@ export default {
             weekHigh: null,
             weekLow: null,
             stockName: null,
+            imgPath: null,
             stocks: [
                 {name: "Apple", ticker: "AAPL"},
                 {name: "Microsoft", ticker: "MSFT"},
                 {name: "Google", ticker: "GOOGL"},
-                {name: "Amazon", ticker: "AMZN"},
+                {name: "Amazon", ticker: "AMZN", logo: require('@/assets/amazon-logo.svg')},
                 {name: "Meta", ticker: "META"},
-                {name: "Tesla", ticker: "TSLA"},
+                {name: "Tesla", ticker: "TSLA", logo: require('@/assets/tesla-logo.svg')},
                 {name: "Netflix", ticker: "NFLX"}
-            ]
+            ],
+            isClicked: false,
+            notificationsIsClicked: false
         }
         
     },
@@ -78,11 +81,16 @@ export default {
         getStockName(ticker) {
             const stock = this.stocks.find(stock => stock.ticker === ticker);
             return stock ? stock.name : null;
+        },
+        getImgPath(ticker) {
+            const stock = this.stocks.find(stock => stock.ticker === ticker);
+            return stock ? stock.logo : null;
         }
     },
     mounted() {
-        this.fetchData();
+        //this.fetchData();
         this.stockName = this.getStockName(this.ticker);
+        this.imgPath = this.getImgPath(this.ticker);
     }
 
 }
@@ -90,114 +98,87 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700&display=swap'); 
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 
-.container {
-    width: 24%;
-    height: 100vh;
+.stock-info-container {  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "name-and-ticker"
+    "pricing"
+    "ask-and-bid"
+    "week-high-low"
+    "volume";
+    height: 100%;
+    width: 100%;
     font-family: 'Montserrat', sans-serif;
+}
+
+.name-and-ticker { 
+    grid-area: name-and-ticker; 
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.img-name-ticker {
+    display: flex;
+    align-items: baseline;
+    color: white;
+}
+
+.stock-logo {
+  width: 30px; /* Adjust as needed */
+  height: 30px; /* Adjust as needed */
+  object-fit: contain;
+  margin-left: 30px;
+  padding-right: 20px;
 }
 
 .stock-name {
-    padding: 10px;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-}
-
-.stock-ticker {
-    padding: 10px;
-    color: white;
-    font-weight: 300;
-    font-size: 0.8em;
-}
-
-.stock-info {
-  display: flex;
-  align-items: baseline; /* aligns the text baselines of the h1 and h2 */
-  margin-left:20px
-}
-
-.pricing {
-    display: flex;
-    align-items: baseline;
-    margin-left: 20px;
-}
-
-.current-price {
-    font-size: 3em;
+    font-size: 30px;
     font-weight: 700;
-    color: #ffffff;
-    margin-top:-20px;
+    margin: 0;
+    padding-right: 20px;
 }
 
-.positive-change {
-    font-size: 0.9em;
-    font-weight: 500;
-    color: #20ec38;
-    margin-top: -10px;
-    padding-left: 10px;
-}
-
-.negative-change {
-    font-size: 0.9em;
-    font-weight: 500;
-    color: #ff0000;
-    margin-top: -10px;
-    padding-left: 10px;
-}
-
-.dynamic-content {
-    font-size: 1em;
-    font-weight: 500;
-    color: rgb(255, 255, 255);
-}
-
-.ask-and-bid {
-  display: flex;
-  align-items: baseline; /* aligns the text baselines of the h1 and h2 */
-  margin-left:25px;
-  color: white;
-  margin-top: -50px;
-}
-
-.ask {
-    font-size: 1em;
+.ticker {
+    font-size: 20px;
     font-weight: 300;
+    margin: 0;
 }
 
-.bid {
-    font-size: 1em;
-    font-weight: 300;
-    padding-left: 20px;
-}
-
-.volume {
-    display: flex;
-    align-items: baseline;
-    margin-left: 25px;
-    margin-top: -10px;
-}
-
-.current-volume {
-    font-size: 1em;
-    font-weight: 300;
+.material-icons-outlined {
+    font-family: 'Material Icons Outlined';
     color:white;
+    transition: color 0.3s ease;
 }
 
-.week-high-low {
-    display: flex;
-    align-items: baseline; /* aligns the text baselines of the h1 and h2 */
-    margin-left:25px;
-    color: white;
-    margin-top: -10px;
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
-.week-high, .week-low {
-    font-size: 1em;
-    font-weight: 300;
+.icons {
+    margin-right: 30px;
 }
 
-.week-low {
-    padding-left: 18px;
+button:first-of-type .material-icons-outlined {
+  margin-right: 20px;
 }
+
+.pricing { grid-area: pricing; }
+
+.ask-and-bid { grid-area: ask-and-bid; }
+
+.week-high-low { grid-area: week-high-low; }
+
+.volume { grid-area: volume; }
+
+
+
 </style>

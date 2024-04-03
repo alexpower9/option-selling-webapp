@@ -1,5 +1,12 @@
 <template>
-  <TopBar></TopBar>
+  <div class="container">
+    <div class="search-bar" style="grid-area: Search-Bar;">
+      <TopBar></TopBar>
+    </div>
+    <div class="stock-info" style="grid-area: Stock-Info;"><StockInfo :ticker="ticker"></StockInfo></div>
+    <div class="stock-graph" style="grid-area: stock-graph"></div>
+  </div>
+  <!-- <TopBar></TopBar>
   <IndexDisplay></IndexDisplay>
   <div class="flex-container">
     <div class="flex-button">
@@ -11,7 +18,7 @@
     <CallChain v-if="optionData" :optionsData="optionData"></CallChain>
     <PutChain v-if="optionData" :optionsData="optionData"></PutChain>
   </div> 
-  <StockInfo :ticker="ticker" v-if="summaryDisplay"></StockInfo>
+  <StockInfo :ticker="ticker" v-if="summaryDisplay"></StockInfo> -->
 </template>
 
 <script>
@@ -94,7 +101,32 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700&display=swap'); 
 
-h1 {
+.container {
+  display: grid; 
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "Search-Bar Search-Bar Search-Bar Search-Bar Search-Bar Search-Bar Search-Bar"
+    "Stock-Info Stock-Info stock-graph stock-graph stock-graph stock-graph stock-graph"
+    "Stock-Info Stock-Info stock-graph stock-graph stock-graph stock-graph stock-graph"
+    "Stock-Info Stock-Info stock-graph stock-graph stock-graph stock-graph stock-graph"
+    "Stock-Info Stock-Info stock-graph stock-graph stock-graph stock-graph stock-graph"; 
+  height: 100vh;
+}
+
+.search-bar { 
+  grid-area: Search-Bar; 
+}
+
+.stock-info {
+  grid-area: Stock-Info;
+}
+
+.stock-graph {
+  grid-area: stock-graph;
+}
+/* h1 {
     color: #ffffff;
     font-size: 2em;
     text-align: center;
@@ -137,5 +169,5 @@ h1 {
 .flex-button button:hover {
   color: rgb(255, 255, 255);
   cursor: pointer;
-}
+} */
 </style>
