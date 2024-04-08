@@ -15,7 +15,9 @@
                 </button>
             </div>
         </div>
-        <div class="pricing"  style="grid-area: pricing"></div>
+        <div class="pricing" style="grid-area: pricing">
+            <h1 class="stock-price">${{last}}</h1>
+        </div>
         <div class="ask-and-bid" style="grid-area: ask-and-bid"></div>
         <div class="week-high-low"  style="grid-area: week-high-low"></div>
         <div class="volume"  style="grid-area: volume"></div>
@@ -88,7 +90,7 @@ export default {
         }
     },
     mounted() {
-        //this.fetchData();
+        this.fetchData();
         this.stockName = this.getStockName(this.ticker);
         this.imgPath = this.getImgPath(this.ticker);
     }
@@ -120,7 +122,7 @@ export default {
     grid-area: name-and-ticker; 
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
 }
 
 .img-name-ticker {
@@ -171,7 +173,17 @@ button:first-of-type .material-icons-outlined {
   margin-right: 20px;
 }
 
-.pricing { grid-area: pricing; }
+.pricing { 
+    grid-area: pricing; 
+    display: flex;
+    color: white;
+}
+
+.stock-price {
+    font-size: 50px;
+    font-weight: 700;
+    margin-left: 30px;
+}
 
 .ask-and-bid { grid-area: ask-and-bid; }
 
