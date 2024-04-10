@@ -15,10 +15,23 @@
                 </button>
             </div>
         </div>
-        <div class="pricing"  style="grid-area: pricing"></div>
-        <div class="ask-and-bid" style="grid-area: ask-and-bid"></div>
-        <div class="week-high-low"  style="grid-area: week-high-low"></div>
-        <div class="volume"  style="grid-area: volume"></div>
+        <div class="pricing" style="grid-area: pricing">
+            <h1 class="stock-price">${{last}}</h1>
+            <div class="price-change">
+                <h2 :class="{ positive: this.change > 0, negative: this.change < 0 }">{{ this.change }}  ({{ this.changepct }}%)</h2>
+            </div>
+        </div>
+        <div class="ask-and-bid" style="grid-area: ask-and-bid">
+            <div><h1 class="ask">Ask: <span class="ask-amount">{{ this.ask }}</span></h1></div>
+            <div><h1 class="bid">Bid: <span class="bid-amount">{{ this.bid }}</span></h1></div>
+        </div>
+        <div class="week-high-low"  style="grid-area: week-high-low">
+            <div class="high-container"><h1 class="five-two-week-high">52 Week High: <span class="high-amount">{{ this.weekHigh }}</span></h1></div>
+            <div class="low-container"><h1 class="five-two-week-low">52 Week Low: <span class="low-amount">{{ this.weekHigh }}</span></h1></div>
+        </div>
+        <div class="volume"  style="grid-area: volume">
+            <h1 class="volume-word">Volume: <span class="volume-amount">{{ this.volume }}</span></h1>
+        </div>
    </div>
 </template>
 
@@ -69,8 +82,8 @@ export default {
                 this.mid = data.mid;
                 this.last = data.last[0];
                 this.change = data.change[0];
-                this.changepct = data.changepct[0];
-                this.volume = data.volume[0];
+                this.changepct = (parseFloat(data.changepct[0]) * 100).toFixed(2);
+                this.volume = Number(data.volume[0]).toLocaleString();
                 this.weekHigh = data['52weekHigh'][0];
                 this.weekLow = data['52weekLow'][0];
             })
@@ -88,7 +101,7 @@ export default {
         }
     },
     mounted() {
-        //this.fetchData();
+        this.fetchData();
         this.stockName = this.getStockName(this.ticker);
         this.imgPath = this.getImgPath(this.ticker);
     }
@@ -120,7 +133,7 @@ export default {
     grid-area: name-and-ticker; 
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
 }
 
 .img-name-ticker {
@@ -171,13 +184,101 @@ button:first-of-type .material-icons-outlined {
   margin-right: 20px;
 }
 
-.pricing { grid-area: pricing; }
+.pricing { 
+    grid-area: pricing; 
+    display: flex;
+    color: white;
+    align-items: baseline;
+}
 
-.ask-and-bid { grid-area: ask-and-bid; }
+.stock-price {
+    font-size: 50px;
+    font-weight: 700;
+    margin-left: 30px;
+}
 
-.week-high-low { grid-area: week-high-low; }
+.price-change {
+    font-size: 15px;
+    margin-left: 30px;
+    display: flex;
+    justify-content: space-around;
+}
+.positive {
+    color: green;
+}
 
-.volume { grid-area: volume; }
+.negative {
+    color : red;
+}
+
+.ask-and-bid { 
+    grid-area: ask-and-bid; 
+    margin-left: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    color:white;
+    width: 70%;
+}
+
+.ask {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.ask-amount {
+    font-size: 30px;
+    font-weight: 300;
+}
+
+.bid {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.bid-amount {
+    font-size: 30px;
+    font-weight: 300;
+}
+
+.week-high-low {
+    grid-area: week-high-low;
+    margin-left: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items:baseline;
+    color: white;
+ }
+
+.five-two-week-high, .five-two-week-low {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.high-amount, .low-amount {
+    font-size: 30px;
+    font-weight: 300;
+    display: flex;
+    align-items: flex-start;
+}
+
+.volume { 
+    grid-area: volume; 
+    margin-left: 30px;
+    display: flex;
+    align-items: flex-start;
+    color: white;
+}
+
+.volume-word {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.volume-amount {
+    font-size: 30px;
+    font-weight: 300;
+}
 
 
 
