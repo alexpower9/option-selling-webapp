@@ -15,6 +15,7 @@
 <script>
 import TopBar from '@/components/TopBar.vue'
 import * as LocalAPI from '@/api/local-api.js'
+import * as MarketDataAPI from '@/api/market-data-api.js'
 
 export default {
   name: 'HomeView',
@@ -29,11 +30,10 @@ export default {
       .then(data => {
         console.log(data["dow30"])
       })
-    }
+    },
   },
   mounted: function() {
     this.testLocalAPI()
-  
   }
 }
 

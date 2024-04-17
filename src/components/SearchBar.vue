@@ -3,7 +3,7 @@
       <div class="search-bar">
         <i class="material-icons-outlined">search</i>
         <input ref="searchInput" class="search-input" type="text" v-model="search" placeholder="Search" @keyup.enter="goToPage(filteredStocks[highlightedIndex].ticker)"
-        @keydown.up.prevent="highlightedIndex = (highlightedIndex + filteredStocks.length - 1) % filteredStocks.length"
+       @keydown.up.prevent="highlightedIndex = (highlightedIndex + filteredStocks.length - 1) % filteredStocks.length"
         @keydown.down.prevent="highlightedIndex = (highlightedIndex + 1) % filteredStocks.length">
       </div>
       <div class="results results-background" v-show="filteredStocks.length > 0"> <!--This should only appear if we are actually searching-->
@@ -18,10 +18,14 @@
 </template>
 
 <script>
+//import { get } from 'core-js/core/dict';
+import * as FinnHubAPI from '@/api/finn-hub-api.js'
+
 export default {
   name: 'SearchBar',
   created() {
     console.log('SearchBar created') //delete this later
+    //this.getSearchResults("Apple")
   },
   data() {
     return {
@@ -50,7 +54,18 @@ export default {
       if(this.filteredStocks.length > 0) {
         this.goToPage(this.filteredStocks[0].ticker);
       }
-    }
+    },
+    // getSearchResults(name) {
+    //   FinnHubAPI.stockSearch(name)
+    //   .then(data => {
+    //     this.stocks = data.result.map(obj => {
+    //       return {
+    //         name: obj.description,
+    //         ticker: obj.displaySymbol
+    //       };
+    //     });
+    //   })
+    // }
   },
   computed: {
     //this should filter based off of either ticker or name
