@@ -4,7 +4,7 @@
       <TopBar></TopBar>
     </div>
     <div class="stock-info" style="grid-area: Stock-Info;"><StockInfo :ticker="ticker"></StockInfo></div>
-    <div class="stock-graph" style="grid-area: stock-graph"></div>
+    <div class="stock-graph" style="grid-area: stock-graph"><StockGraph :options="options" :series="series"></StockGraph></div>
   </div>
   <!-- <TopBar></TopBar>
   <IndexDisplay></IndexDisplay>
@@ -29,17 +29,49 @@ import PutChain from '@/components/PutChain.vue';
 import IndexDisplay from '@/components/IndexDisplay.vue';
 import * as MarketDataAPI from '@/api/market-data-api.js'
 import StockInfo from '@/components/StockInfo.vue';
+import StockGraph from '@/components/StockGraph.vue'
 
 export default {
   name: 'StockPage',
-  components: {TopBar, CallChain, PutChain, IndexDisplay, StockInfo},
+  components: {TopBar, CallChain, PutChain, IndexDisplay, StockInfo, StockGraph},
   props:['ticker'],
   data() {
     return {
       price: null,
       strikes: [],
       optionData: null,
-      summaryDisplay: true
+      summaryDisplay: true,
+      options : {
+        chart: {
+          id: 'vuechart-example',
+          toolbar: {
+            show : false
+          }
+        },
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        },
+        dataLabels: {
+          enabled : false
+        },
+        stroke: {
+          show : false
+        },
+        fill: {
+          type : "gradient",
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0,90,100]
+          }
+        },
+        colors : ["#4C2AFF", "#705dd0","#9784f5"],
+      },
+      series :  [{
+        name: 'Price',
+        data: [30, 40, 45, 50, 49, 60, 70, 91]
+      }]
     };
   },
   methods: {

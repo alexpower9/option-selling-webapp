@@ -57,3 +57,18 @@ export const stockData = (ticker) => {
     .then(response => response.data)
 }
 
+//lets just worry about daily data on a 5minute interval for now, but in the future,
+//we can investigate how we can go about adding the stock graph bar for other things
+export const stockGraphData = (ticker) => {
+    const now = Math.floor(Date.now() / 1000); //unix time stamp
+    const oneDayAgo = now - 86400; 
+
+    return axiosInstance().get(`https://api.marketdata.app/v1/stocks/candles/15/${ticker}`, {
+        params: {
+            from : oneDayAgo,
+            to : now
+        }
+    })
+    .then(response => response.data)
+
+}
