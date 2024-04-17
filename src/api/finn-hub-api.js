@@ -7,25 +7,25 @@ const axiosInstance = () => {
             'Content-Type': 'application/json',
         }
     })
-    axiosInstance.interceptors.request.use((config) => {
-        const apiKey = process.env.VUE_APP_FINN_HUB
-        config.params = {
-            token: apiKey
-        }
-        return config;
-    });
+    
+    // on request being made, intercept it and add on Authorization header automatically
+    // axiosInstance.interceptors.request.use((config) => {
+    //     const apiKey = process.env.FINN_HUB
+    //     config.headers['X-Finnhub-Token'] =  apiKey
+    //     return config;
+    // });
     return axiosInstance
 }
 
 export const stockSearch = (name) => {
-    const key = process.env.VUE_APP_FINN_HUB
-    return axiosInstance().get(`https://finnhub.io/api/v1/search?q=${name}&token=${key}`)
+    const key = process.env.FINN_HUB
+    return axiosInstance().get(`https://finnhub.io/api/v1/search`, {
+        params: {
+            q : name
+        },
+        headers : {
+            'X-Finnhub-Token': key
+        }
+    })
     .then(response => response.data)
 }
-
-
-// export const otherStockSearch = (name) => {
-//     const key = process.env.FINN_HUB
-//     return axiosInstance().get(`https://finnhub.io/api/v1/search`)
-//     .then(response => response.data)
-// }

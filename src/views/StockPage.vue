@@ -4,7 +4,9 @@
       <TopBar></TopBar>
     </div>
     <div class="stock-info" style="grid-area: Stock-Info;"><StockInfo :ticker="ticker"></StockInfo></div>
-    <div class="stock-graph" style="grid-area: stock-graph"><StockGraph :options="options" :series="series"></StockGraph></div>
+    <div class="stock-graph" style="grid-area: stock-graph">
+        <StockGraph v-if="series[0].data && series[0].data.length > 0" :options="options" :series="series"></StockGraph>
+    </div>
   </div>
   <!-- <TopBar></TopBar>
   <IndexDisplay></IndexDisplay>
@@ -22,6 +24,7 @@
 </template>
 
 <script>
+import moment from 'moment-timezone';
 import TopBar from '@/components/TopBar.vue'
 import axios from 'axios';
 import CallChain from '@/components/CallChain.vue';
@@ -49,7 +52,7 @@ export default {
           }
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          categories: []
         },
         dataLabels: {
           enabled : false
@@ -70,7 +73,7 @@ export default {
       },
       series :  [{
         name: 'Price',
-        data: [30, 40, 45, 50, 49, 60, 70, 91]
+        data: []
       }]
     };
   },
@@ -113,11 +116,53 @@ export default {
     showCallChain() {
       this.summaryDisplay = false;
       console.log("Showing overview")
+    },
+    fetchStockChartData() {
+      //this.options.xaxis.categories = [];
+      const now = moment().tz("America/New_York");
+      const marketOpen = moment().tz("America/New_York").hour(9).minute(30).second(0);
+      const marketClose = moment().tz("America/New_York").hour(16).minute(0).second(0);
+      let from, to;
+
+      if (now.isBetween(marketOpen, marketClose)) {
+        from = marketOpen.unix();
+        to = now.unix();
+      } else {
+        let previousDay = now.subtract(1, 'days');
+        while (previousDay.day() === 0 || previousDay.day() === 6) {
+          previousDay.subtract(1, 'days');
+        }
+        from = previousDay.hour(9).minute(30).second(0).unix();
+        to = previousDay.hour(16).minute(0).second(0).unix();
+      }
+      let intervals = Math.ceil((to - from) / (15 * 60));
+      let categories = [];
+      for (let i = 0; i < intervals; i++) {
+        let time = moment.unix(from).add(i * 15, 'minutes');
+        categories.push(time.format('h:mm A'));    
+      }
+
+      this.options.xaxis.categories = categories;
+      //console.log(this.series[0].data);
+
+      console.log('From:', moment.unix(from).format('HH:mm')); // print 'from' in 'HH:mm' format
+      console.log('To:', moment.unix(to).format('HH:mm')); // print 'to' in 'HH:mm' format
+
+
+      MarketDataAPI.stockGraphData(this.ticker, from, to)
+      .then(data => {
+        console.log("Here is the data ", data)
+        this.series[0].data = [...data.c];
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
   },
   mounted() {
     console.log('StockPage created') //delete this later
     this.fetchDataWithAPI();
+    this.fetchStockChartData()
   },
   watch: {
     ticker: {
