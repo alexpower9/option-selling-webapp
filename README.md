@@ -19,9 +19,9 @@ One of my favourite strategies is selling vertical spreads on blue chip stocks, 
     ```
 2. **Step 2**: Ensure Node.js is installed on your local machine
 
-3. **Step 3**: Create a .env file in the root directory of the project
+3. **Step 3**: Create a .env file in the root directory of the project. Create a variable called "VUE_APP_API_KEY". Then head over to https://www.marketdata.app/ and obtain an api key. The final product should look like this.
     ```
-    Declare a variable called 'VUE_APP_API_KEY'. Then, head over to https://www.marketdata.app/ and obtain an API key. Complete this step by ensuring VUE_APP_API_KEY=your_api_key
+    VUE_APP_API_KEY=your_api_key
     ```
 4. **Step 4**: Run the project, which starts the local server on port 3000 and the Vue.js web app on port 8080
     ```
