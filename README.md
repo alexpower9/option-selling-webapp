@@ -13,4 +13,17 @@ One of my favourite strategies is selling vertical spreads on blue chip stocks, 
 
 ## How can I operate this to try it for myself?
 
-First, ensure node is installed on your machine. Then, create a .env file, and write "VUE_APP_API_KEY=". Go to marketdata.app and obtain your api key, and set this env variable equal to it as a string. Then, run npm install to ensure all dependencies are installed on your machine. When this is completed, run "npm run dev", which will start the local server (for now atleast) and display your link to the web app being hosted locally. Here, you should be able to do things such as create an account, create sub accounts, and begin trading. 
+1. **Step 1**: Clone the repository to your local machine.
+    ```
+    git clone https://github.com/alexpower9/option-selling-webapp.git
+    ```
+2. **Step 2**: Ensure Node.js is installed on your local machine
+
+3. **Step 3**: Create a .env file in the root directory of the project
+    ```
+    Declare a variable called 'VUE_APP_API_KEY'. Then, head over to https://www.marketdata.app/ and obtain an API key. Complete this step by ensuring VUE_APP_API_KEY=your_api_key
+    ```
+4. **Step 4**: Run the project, which starts the local server on port 3000 and the Vue.js web app on port 8080
+    ```
+    npm run dev
+    ```
