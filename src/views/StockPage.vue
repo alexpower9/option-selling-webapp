@@ -30,7 +30,8 @@ import axios from 'axios';
 import CallChain from '@/components/CallChain.vue';
 import PutChain from '@/components/PutChain.vue';
 import IndexDisplay from '@/components/IndexDisplay.vue';
-import * as MarketDataAPI from '@/api/market-data-api.js'
+//import * as MarketDataAPI from '@/api/market-data-api.js'
+import * as LocalAPI from '@/api/api-call-local-server.js'
 import StockInfo from '@/components/StockInfo.vue';
 import StockGraph from '@/components/StockGraph.vue'
 
@@ -78,30 +79,8 @@ export default {
     };
   },
   methods: {
-    fetchData() {
-      this.strikes = [];
-      let API_KEY = process.env.VUE_APP_API_KEY; 
-
-      axios.get('https://api.marketdata.app/v1/options/chain/' + this.ticker +'/', {
-        headers: {
-          'Authorization': 'Bearer ' + API_KEY
-        },
-        params: {
-          //dont actually need the date if I omit it all together
-          //dte : 365
-          strikeLimit: 20, //only 10 strikes for now
-        }
-      })
-      .then(response => {
-        this.optionData = response.data;
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    },
     fetchDataWithAPI() {
-      MarketDataAPI.getOptionData(this.ticker, 20)
+      LocalAPI.getOptionData(this.ticker, 20)
       .then(data => {
         this.optionData = data;
       })
@@ -149,9 +128,9 @@ export default {
       console.log('To:', moment.unix(to).format('HH:mm')); // print 'to' in 'HH:mm' format
 
 
-      MarketDataAPI.stockGraphData(this.ticker, from, to)
+      LocalAPI.getStockGraphData(this.ticker)
       .then(data => {
-        console.log("Here is the data ", data)
+        console.log("Graph data: ", data)
         this.series[0].data = [...data.c];
       })
       .catch(error => {

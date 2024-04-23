@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import * as MarketDataAPI from '@/api/market-data-api.js'
+import * as LocalAPI from '@/api/api-call-local-server.js'
 
 export default {
     name: 'StockInfo',
@@ -72,10 +72,12 @@ export default {
     },
     methods: {
         fetchData() {
-            MarketDataAPI.stockData(this.ticker)
+            LocalAPI.getStockData(this.ticker)
             .then(data => {
+                console.log("Here is the stock data")
                 console.log(data)
                 this.ask = data.ask[0];
+                console.log("The ask was " + this.ask)
                 this.askSize = data.askSize;
                 this.bid = data.bid[0];
                 this.bidSize = data.bidSize;
